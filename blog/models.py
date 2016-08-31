@@ -15,7 +15,7 @@ class Post(models.Model):
 	content=models.TextField()
 	image=models.ImageField(null=True, blank=True, upload_to=upload_location,)
 	updated_date=models.DateTimeField(auto_now=True,auto_now_add=False)
-	published_date=models.DateTimeField()
+	published_date=models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
 		return self.title

@@ -31,13 +31,12 @@
 			var markedcontent=marked(content)
 			$(this).html(markedcontent)
 		})
+	$(".content-markdown img").each(function(){
+	$(this).addClass("img-responsive")
+		
 	})
-</script>
-<script>
-$(document).ready(function(){
-	$(".content-markdown img").addClass("img-responsive")
 
-})
+	})
 </script>
 </body>
 </html>

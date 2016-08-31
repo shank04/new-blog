@@ -15,7 +15,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="{% url 'post_create' %}">Write Blog</a></li>
-          
+
           {%if user.is_authenticated%}
 
             <li><a>Hello {{request.user.username}}!</a></li>
@@ -37,7 +37,9 @@
 
 <div class='col-sm-6 col-sm-offset-3'>
 <div class="thumbnail">
-<h1>{{instance.title}} <small> ,{{ instance.published_date|timesince}} ago</small><h1>
+<div class="caption">
+
+<h1>{{instance.title}} <small> ,{{ instance.published_date|timesince}} ago</small></h1>
 {%if instance.image%}
 <img src='{{instance.image.url}}' width="300px" height="200px" /><br>
 {%endif%}
@@ -48,7 +50,7 @@
   <i class="fa fa-edit fa-lg"></i> Edit</a>
 <a class="btn btn-danger" href="{% url 'post_delete' instance.id %}">
   <i class="fa fa-trash-o fa-lg"></i> Delete</a>
-
+</div>
 </div>
 
 </div>
