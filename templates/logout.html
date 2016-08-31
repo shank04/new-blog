@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{%block content%}
+<div class='col-sm-6 col-sm-offset-3'>
+
+<h1 class="lead">Confirm Logout</h1>
+<div class="container">
+<form action="" method="POST">
+	{% csrf_token %}
+<p>Are you sure you want to logout ?</p>
+<input class="btn btn-danger" type="submit" value="Confirm"></input>
+<a class="btn btn-primary" href="{%url 'post_list'%}">Cancel</a>
+</form>
+</div>
+</div>
+{%endblock content%}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{%block content%}
+{% load crispy_forms_tags %} 
+<div><nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'post_list' %}">Home</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'post_create' %}">Write Blog</a></li>
+          
+          {%if user.is_authenticated%}
+
+            <li><a>Hello {{request.user.username}}!</a></li>
+            <li class="nav nav-pills" role="tablist"><a href="{% url 'myposts' %}">My Posts
+<span class="badge">{{selfposts.count}}</span>
+</a></li>
+            <li><a href="{% url 'logout' %}">logout</a></li>
+          {%else%}
+            <li><a href="{% url 'register' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">login</a></li>
+          {%endif%}
+            
+          </ul>
+          
+        </div>
+      </div>
+    </nav>
+</div>
+
+<div class='col-sm-6 col-sm-offset-3'>
+<div class="thumbnail">
+<h1>{{instance.title}} <small> ,{{ instance.published_date|timesince}} ago</small><h1>
+{%if instance.image%}
+<img src='{{instance.image.url}}' width="300px" height="200px" /><br>
+{%endif%}
+<div class="content-markdown">{{instance.content}}</div>
+
+<div>
+<a class="btn btn-warning" href="{% url 'post_update' instance.id %}">
+  <i class="fa fa-edit fa-lg"></i> Edit</a>
+<a class="btn btn-danger" href="{% url 'post_delete' instance.id %}">
+  <i class="fa fa-trash-o fa-lg"></i> Delete</a>
+
+</div>
+
+</div>
+<hr/>
+<div>
+<p class="lead nav nav-pills" role="tablist">Comments
+<span class="badge">{{comments.count}}</span></p><br>
+
+<form method="POST" action="">
+{% csrf_token %}
+{{comment_form|crispy}}
+<small><input type="submit" value="Post comment"></input></small>
+</form>
+
+
+{% for comment in comments %}
+<div class="">
+	<blockquote>
+	<p>{{comment.content}}</p>
+	
+	<footer>by {{comment.user}} | {{comment.timestamp|timesince}} ago</footer>
+	</blockquote>
+	<hr/>
+</div>
+{% endfor %}
+
+</div>
+{%endblock content%}

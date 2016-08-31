@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+
+<link rel="stylesheet" href="{% static  "css/base.css" %}"></link>
+
+
+</head>
+<body>
+{% include 'messages.html' %}
+<div class="container">
+{% block head %}
+
+{% endblock head %}
+
+{% block content %}
+{% endblock content %}
+
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/d4616355d4.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js
+"></script>
+
+<script>
+	$(document).ready(function(){
+		$(".content-markdown").each(function(){
+			var content=$(this).text()
+			var markedcontent=marked(content)
+			$(this).html(markedcontent)
+		})
+	})
+</script>
+<script>
+$(document).ready(function(){
+	$(".content-markdown img").addClass("img-responsive")
+
+})
+</script>
+</body>
+</html>
