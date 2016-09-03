@@ -55,8 +55,8 @@
 	
 	
 	{%if post.image%}
-		<img src='{{post.image.url}}' width="300px" height="200px" /><br>
-	{%endif%}
+		<img class="UploadImage" src='{{post.image.url}}'/><br>
+	{%endif%} 
     <br>
     <p><a href={{post.get_absolute_url}} class="btn btn-primary" role="button">View &raquo;</a></p>
     </div>

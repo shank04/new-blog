@@ -1,4 +1,14 @@
-body{
-	color: white;
-	background: #181818 ;
+#main{
+	width:600px;
+	text-align:center; 
+}
+.wmd-panel {
+	margin: 0px !important;
+	padding: 0px !important;
+}
+.red{
+	color:red;
+}
+.messages{
+	list-style: none;
 }

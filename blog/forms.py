@@ -7,11 +7,11 @@ from django.contrib.auth import authenticate,login
 
 
 class Postform(forms.ModelForm):
-	published_date=forms.DateTimeField(widget=forms.SelectDateWidget)
+	
 	content=forms.CharField(widget=PagedownWidget)
 	class Meta:
 		model=Post
-		fields=['user','title','content','image','published_date']
+		fields=['title','content','image']
 
 
 class UserForm(forms.ModelForm):

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<head>
+    <title>Home|Blog</title>
+    
+</head>
 <body>
 <div><nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
@@ -39,7 +43,7 @@
 <form method="GET" action="">
 <input type="text" name="q" placeholder="Search post.." value="{{ request.GET.q }}"></input>
 
-<button type="submit" value="Search" >Search<i class="fa fa-search">  </i></button>
+<button type="submit" value="Search" class="btn btn-success">Search <i class="fa fa-search">  </i></button>
 
 </form>
 {% for post in post_page %}
@@ -50,13 +54,14 @@
 
 	
 	<h2 class="red">{{post.title}}</h2>
-    <p>published :<small> {{post.published_date|timesince}} ago</small> |
-    updated :<small>{{post.updated_date|timesince}} ago</small></p>
+    <small>posted by : {{post.user.username}}</small>
+    <p><small> published : {{post.published_date|timesince}} ago</small> |
+    <small>updated :{{post.updated_date|timesince}} ago</small></p>
 	<div class=content-markdown>{{post.content}}</div>
 	
 	
 	{%if post.image%}
-		<img src='{{post.image.url}}' width="300px" height="200px" /><br>
+		<img src='{{post.image.url}}' class="uploadImage" /><br>
 	{%endif%}
     <br>
     <p><a href={{post.get_absolute_url}} class="btn btn-primary" role="button">View &raquo;</a></p>

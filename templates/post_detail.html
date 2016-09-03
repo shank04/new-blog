@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {%block content%}
 {% load crispy_forms_tags %} 
+<head>
+    <title>{{instance.title}}|Blog</title>
+</head>
+
 <div><nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
@@ -39,17 +43,20 @@
 <div class="thumbnail">
 <div class="caption">
 
-<h1>{{instance.title}} <small> ,{{ instance.published_date|timesince}} ago</small></h1>
+<h1>{{instance.title}}</h1>
+<small>posted by : {{instance.user.username}}</small>
+    <p><small> published : {{instance.published_date|timesince}} ago</small> |
+    <small>updated :{{instance.updated_date|timesince}} ago</small></p>
 {%if instance.image%}
-<img src='{{instance.image.url}}' width="300px" height="200px" /><br>
+<img class="UploadImage" src='{{instance.image.url}}'/><br>
 {%endif%}
 <div class="content-markdown">{{instance.content}}</div>
 
 <div>
 <a class="btn btn-warning" href="{% url 'post_update' instance.id %}">
-  <i class="fa fa-edit fa-lg"></i> Edit</a>
+  <i class="fa fa-edit fa-lg"></i> Edit &raquo;</a>
 <a class="btn btn-danger" href="{% url 'post_delete' instance.id %}">
-  <i class="fa fa-trash-o fa-lg"></i> Delete</a>
+  <i class="fa fa-trash-o fa-lg"></i> Delete &raquo;</a>
 </div>
 </div>
 
@@ -62,7 +69,7 @@
 <form method="POST" action="">
 {% csrf_token %}
 {{comment_form|crispy}}
-<small><input type="submit" value="Post comment"></input></small>
+<small><input class="btn btn-success" type="submit" value="Post comment &raquo;"></input></small>
 </form>
 
 

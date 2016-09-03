@@ -104,15 +104,17 @@ def post_create(request):
 			response=HttpResponse("<h3>Sorry, You need to be logged in to write a Blog</h3>")
 			response.status_code=403
 			return response
+	selfposts=Post.objects.filter(user=request.user)
 
-	form=Postform(request.POST or None,request.FILES or None)
+	inst=Post(user=request.user)
+	form=Postform(request.POST or None,request.FILES or None,instance=inst,)
 	if form.is_valid():
 		instance=form.save(commit=False)
 		instance.save()
 		messages.success(request,'Successfully Posted')
 		return HttpResponseRedirect(instance.get_absolute_url())
 	
-	context={'form':form}
+	context={'form':form,'selfposts':selfposts}
 	return render(request,'post_form.html',context)
 
 def post_update(request,id):

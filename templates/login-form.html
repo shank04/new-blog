@@ -2,13 +2,50 @@
 {% load crispy_forms_tags %}
 
 {%block content%}
+<head>
+    <title>Login|Blog</title>
+</head>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'post_list' %}">Home</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'post_create' %}">Write Blog</a></li>
+          {%if user.is_authenticated%}
+
+            <li><a>Hello {{request.user.username}}!</a></li>
+            <li class="nav nav-pills" role="tablist"><a href="{% url 'myposts' %}">My Posts
+<span class="badge">{{selfposts.count}}</span>
+</a></li>
+            <li><a href="{% url 'logout' %}">logout</a></li>
+
+          {%else%}
+            <li><a href="{% url 'register' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">login</a></li>
+          {%endif%}
+            
+          </ul>
+          
+        </div>
+      </div>
+    </nav>
+
 <div class="col-sm-6 col-sm-offset-3">
  <h1 class="lead">Please Login!</h1>
 
 <form action="" method="POST">
 	{% csrf_token %}
 {{ form|crispy }}
-<button type="submit" value="submit">Login</button>
+<button type="submit" value="submit" class="btn btn-success">Login &raquo;</button>
 </form>
 </div>
 {%endblock content%}
