@@ -50,7 +50,7 @@ def post_list(request):
 			'post_page':post_page,
 
 			'selfposts':selfposts,
-			'form':form,
+			'forml':form,
 			'formr':formr
 
 		}
@@ -58,7 +58,7 @@ def post_list(request):
 		context={
 			'posts':posts,
 			'post_page':post_page,
-			'form':form,
+			'forml':form,
 			'formr':formr
 
 			
@@ -99,7 +99,7 @@ def post_detail(request,id):
 		'comments':c,
 		'comment_form':form,
 		'selfposts':selfposts,
-		'form':forml,
+		'forml':forml,
 		'formr':form
 
 		}
@@ -108,7 +108,7 @@ def post_detail(request,id):
 		'instance':instance,
 		'comments':c,
 		'comment_form':form,
-		'form':forml,
+		'forml':forml,
 		'formr':form
 
 		}
@@ -267,7 +267,7 @@ def LoginFormView(request):
 	context={
 			'posts':posts,
 			'post_page':post_page,
-			'form':form,
+			'forml':form,
 			'formr':formr
 
 			
