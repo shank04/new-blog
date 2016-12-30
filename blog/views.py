@@ -16,6 +16,7 @@ from django.views import generic
 from django.views.generic import View
 from .forms import UserForm
 from .forms import LoginForm
+import sys
 
 
 def post_list(request):
@@ -26,10 +27,13 @@ def post_list(request):
 
 	query=request.GET.get('q')
 	if query:
-		posts=posts.filter(Q(title__icontains=query)|Q(content__contains=query))
+		posts=posts.filter(Q(title__icontains=query))
 
 	paginator = Paginator(posts, 5)
 	page = request.GET.get('page')
+	formr=UserForm(request.POST or None)
+
+	form=LoginForm(request.POST or None)
 		    
 	try:
 		post_page = paginator.page(page)
@@ -45,12 +49,17 @@ def post_list(request):
 			'posts':posts,
 			'post_page':post_page,
 
-			'selfposts':selfposts
+			'selfposts':selfposts,
+			'form':form,
+			'formr':formr
+
 		}
 	else:
 		context={
 			'posts':posts,
 			'post_page':post_page,
+			'form':form,
+			'formr':formr
 
 			
 		}
@@ -65,6 +74,9 @@ def post_detail(request,id):
 		selfposts=Post.objects.filter(user=request.user)
 
 	c=Comment.objects.filter(post__id=id)
+	formr=UserForm(request.POST or None)
+
+	forml=LoginForm(request.POST or None)
 	
 	form=commentform(request.POST or None)
 	if form.is_valid():
@@ -86,14 +98,19 @@ def post_detail(request,id):
 		'instance':instance,
 		'comments':c,
 		'comment_form':form,
-		'selfposts':selfposts
+		'selfposts':selfposts,
+		'form':forml,
+		'formr':form
+
 		}
 	else:
 		context={
 		'instance':instance,
 		'comments':c,
 		'comment_form':form,
-		
+		'form':forml,
+		'formr':form
+
 		}
 
 	return render(request,'post_detail.html',context)
@@ -163,12 +180,36 @@ def post_delete(request,id):
 
 
 def UserFormView(request):
-	form=UserForm(request.POST or None)
-	if form.is_valid():
-		user=form.save(commit=False)
+	posts=Post.objects.all()
+	if request.user.is_authenticated():
 
-		username=form.cleaned_data.get('username')
-		password=form.cleaned_data.get('password')
+		selfposts=Post.objects.filter(user=request.user)
+
+	query=request.GET.get('q')
+	if query:
+		posts=posts.filter(Q(title__icontains=query))
+
+	paginator = Paginator(posts, 5)
+	page = request.GET.get('page')
+	
+
+	# form=LoginForm(request.POST or None)
+		    
+	try:
+		post_page = paginator.page(page)
+	except PageNotAnInteger:
+		        # If page is not an integer, deiver first page.
+		post_page = paginator.page(1)
+	except EmptyPage:
+		        # If page is out of range (e.g. 9999), deliver last page of results.
+		post_page = paginator.page(paginator.num_pages)
+
+	formr=UserForm(request.POST or None)
+	if formr.is_valid():
+		user=formr.save(commit=False)
+
+		username=formr.cleaned_data.get('username')
+		password=formr.cleaned_data.get('password')
 			# profile_pic=form.cleaned_data['profile_pic']
 		user.set_password(password)
 			
@@ -178,12 +219,43 @@ def UserFormView(request):
 		messages.success(request,'You are Successfully Registered:)')
 
 		return redirect('post_list')
-	return render(request,'registration-form.html',{'form':form})
+
+	context={
+			'posts':posts,
+			'post_page':post_page,
+			
+			'formr':formr
+			}
+	return render(request,'post_list.html',context)
 
 
 def LoginFormView(request):
-	# form_class=LoginForm
-	# template_name='login-form.html'
+	
+	
+	posts=Post.objects.all()
+	if request.user.is_authenticated():
+
+		selfposts=Post.objects.filter(user=request.user)
+
+	query=request.GET.get('q')
+	if query:
+		posts=posts.filter(Q(title__icontains=query))
+
+	paginator = Paginator(posts, 5)
+	page = request.GET.get('page')
+	formr=UserForm(request.POST or None)
+
+	# form=LoginForm(request.POST or None)
+		    
+	try:
+		post_page = paginator.page(page)
+	except PageNotAnInteger:
+		        # If page is not an integer, deiver first page.
+		post_page = paginator.page(1)
+	except EmptyPage:
+		        # If page is out of range (e.g. 9999), deliver last page of results.
+		post_page = paginator.page(paginator.num_pages)
+	
 	form=LoginForm(request.POST or None)
 	if form.is_valid():
 		username=form.cleaned_data.get("username")
@@ -192,7 +264,15 @@ def LoginFormView(request):
 		login(request,user)
 		messages.success(request,'You are logged in!')
 		return redirect('post_list')
-	return render(request,'login-form.html',{'form':form})
+	context={
+			'posts':posts,
+			'post_page':post_page,
+			'form':form,
+			'formr':formr
+
+			
+		}
+	return render(request,'post_list.html',context)
 
 
 
@@ -215,7 +295,7 @@ def myposts(request):
 	posts=Post.objects.filter(user=request.user)
 	query=request.GET.get('q')
 	if query:
-		posts=posts.filter(Q(title__icontains=query)|Q(content__contains=query))
+		posts=posts.filter(Q(title__icontains=query))
 
 	paginator = Paginator(posts, 5)
 	page = request.GET.get('page')
@@ -234,3 +314,4 @@ def myposts(request):
 	'post_page':post_page,
 	}
 	return render(request,'myposts.html',context)
+

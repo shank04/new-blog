@@ -1,68 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-<div><nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'post_list' %}">Home</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="{% url 'post_create' %}">Write Blog</a></li>
-          {%if user.is_authenticated%}
-            
-            <li><a>Hello {{request.user.username}}!</a></li>
-            <li class="nav nav-pills" role="tablist"><a href="{% url 'myposts' %}">My Posts
-<span class="badge">{{posts.count}}</span>
-</a></li>
-            <li><a href="{% url 'logout' %}">logout</a></li>
-          {%else%}
-            <li><a href="{% url 'register' %}">Sign Up</a></li>
-            <li><a href="{% url 'login' %}">login</a></li>
-          {%endif%}
-            
-          </ul>
-          
-        </div>
-      </div>
-    </nav>
-</div>
-<!-- <br><br><br> -->
-<div class='col-sm-6 col-sm-offset-3'>
+<div class='col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 ''>
 <form method="GET" action="">
 <input type="text" name="q" placeholder="Search post.." value="{{ request.GET.q }}"></input>
 
-<button type="submit" value="Search" >Search<i class="fa fa-search">  </i></button>
+<button type="submit" value="Search" class="btn btn-success">Search <i class="fa fa-search">  </i></button>
 
 </form>
+</div>
 {% for post in post_page %}
-	<div class=row>
-    <div class='col-sm-12'>
+  <div class=row>
+    <div class='col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8 '>
     <div class='thumbnail'>
     <div class='caption'>
 
-	
-	<h2 class="red">{{post.title}}</h2>
-    <p>published :<small> {{post.published_date|timesince}} ago</small> |
-    updated :<small>{{post.updated_date|timesince}} ago</small></p>
-	<div class=content-markdown>{{post.content}}</div>
-	
-	
-	{%if post.image%}
-		<img class="UploadImage" src='{{post.image.url}}'/><br>
-	{%endif%} 
+  
+  <h2 class="red">{{post.title}}</h2>
+    <small>posted by : {{post.user.username}}</small>
+    <p><small> published : {{post.published_date|timesince}} ago</small> |
+    <small>updated :{{post.updated_date|timesince}} ago</small></p>
+  <div class=content-markdown>{{post.content}}</div>
+  
+  
+  {%if post.image%}
+    <img src='{{post.image.url}}' class="uploadImage" /><br>
+  {%endif%}
     <br>
     <p><a href={{post.get_absolute_url}} class="btn btn-primary" role="button">View &raquo;</a></p>
     </div>
     </div>
     </div>
-	<hr>
+  <hr>
     </div>
 {% endfor %}
 

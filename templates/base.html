@@ -1,15 +1,54 @@
 {% load staticfiles %}
-<html>
-<head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+{% load crispy_forms_tags %}
 
-<link rel="stylesheet" href="{% static  "css/base.css" %}"></link>
+<html>
+<head><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="{% static  'css/base.css' %}"></link>
 
 
 </head>
 <body>
 {% include 'messages.html' %}
-<div class="container">
+
+<!-- <div class="container"> -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+       <a class="navbar-brand" href="{% url 'post_list' %}"><span class="glyphicon glyphicon-home"></span> Home</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'post_create' %}"><span class="glyphicon glyphicon-pencil"></span> Write Blog</a></li></ul>
+          
+        {%if user.is_authenticated%}
+        <ul class="nav navbar-nav navbar-left">
+
+        <li class="nav nav-pills" role="tablist"><a href="{% url 'myposts' %}">My Posts
+<span class="badge">{{selfposts.count}}</span>
+</a></li></ul>
+         {%endif%} 
+          
+        <ul class="nav navbar-nav navbar-right">
+          {%if user.is_authenticated%}
+        	
+            <li><a><span class="glyphicon glyphicon-user"></span> Hello {{request.user.username}}!</a></li>
+            
+            <li data-toggle="modal" data-target="#myModal3"><a href=""><span class="glyphicon glyphicon-log-out"></span> logout</a></li>
+
+          {%else%}
+            <li data-toggle="modal" data-target="#myModal1"><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li data-toggle="modal" data-target="#myModal2"><a href="" ><span class="glyphicon glyphicon-log-in"></span> login</a></li></ul>
+          {%endif%}
+      
+          </div>
+  </div>
+</nav>
 {% block head %}
 
 {% endblock head %}
@@ -17,12 +56,160 @@
 {% block content %}
 {% endblock content %}
 
-</div>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://use.fontawesome.com/d4616355d4.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js
+<div class="container">
+  
+ 
+ 
+  
+  <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+    
+    
+      <div class="modal-content">
+        <div class="modal-header">
+     
+          
+           <a type="button" {% if request.path == '/register/' %} href="{%url 'post_list'%}" {%else%} href="{{ request.path }}" {%endif%} class="close" data-dismiss="myModal1" >&times;</a>
+
+          <h1 class="modal-header lead">Please Register!</h1>
+        </div>
+        <div class="modal-body">
+          
+
+<form action="{% url 'register' %}" method="POST">
+	{% csrf_token %}
+{{ formr|crispy }}
+<button type="submit" value="submit" class="btn btn-success">Register &raquo;</button>
+</form>
+
+
+        </div>
+              </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+
+
+
+<div class="container">
+  
+ 
+ 
+  
+  <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+    
+     
+      <div class="modal-content">
+        <div class="modal-header">
+ 
+
+          <a type="button" {% if request.path == '/login/' %} href="{%url 'post_list'%}" {%else%} href="{{ request.path }}" {%endif%} class="close" data-dismiss="myModal2" >&times;</a>
+
+          <h1 class="modal-header lead">Please Login!</h1>
+        </div>
+        <div class="modal-body">
+
+         
+          
+          <form action="{% url 'login' %}" method="POST">
+  {% csrf_token %}
+{{ form|crispy }}
+
+<button type="submit" value="submit" class="btn btn-success">Login &raquo;</button>
+</form>
+
+        </div>
+          </div>
+      
+    </div>
+  </div>
+  
+</div>
+<script>
+    
+</script>
+
+
+<div class="container">
+  
+ 
+ 
+  
+  <div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog">
+    
+     
+      <div class="modal-content">
+        <div class="modal-header">
+ 
+
+          <button type="button" class="close" data-dismiss="modal" >&times;</button>
+
+          <h1 class="modal-header lead">Confirm Logout</h1>
+        </div>
+        <div class="modal-body">
+
+         
+          
+          <form action="{% url 'logout' %}" method="POST">
+	{% csrf_token %}
+<p>Are you sure you want to logout ?</p>
+<input class="btn btn-danger" type="submit" value="Yes, I'm sure &raquo;"></input>
+<a class="btn btn-primary" href="{%url 'post_list'%}">No, take me back &raquo;</a>
+
+
+        </div>
+          </div>
+      
+    </div>
+  </div>
+
+
+
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <!-- <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+     -->
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <!-- <script>
+reg = {% if formr.errors %}true{% else %}false{% endif %};
+
+logg = {% if form.errors %}true{% else %}false{% endif %};
+    $( document ).ready(function() {
+    	if (logg) {
+           $('#myModal2').modal('toggle');
+       }
+    	
+       else if (reg) {
+           $('#myModal1').modal('toggle');
+       }
+    });
+</script>
+
+ -->    <script src="https://use.fontawesome.com/d4616355d4.js"></script>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js
 "></script>
+<script>
+reg = {% if formr.errors %}true{% else %}false{% endif %};
+
+logg = {% if form.errors %}true{% else %}false{% endif %};
+    $( document ).ready(function() {
+    	if (logg) {
+           $('#myModal2').modal('toggle');
+       }
+    	
+       else if (reg) {
+           $('#myModal1').modal('toggle');
+       }
+    });
+</script>
 
 <script>
 	$(document).ready(function(){
